@@ -9,7 +9,29 @@
 \maketitle
 
 
-\section{Problem 1}
+\section{Question 1}
+The experimentation showed that training of the neuron always converges, given that the learning rate is a positive real number; for any given negative real number tested, training resulted in an endless loop that did not stop, the initial weights set did not seem to have any impact on this. Table 1 shows the results of testing with different learning rates, and different initial weight vectors; the resulting accuracy of the four neurons is also shown for reference. 
+
+\begin{table}[]
+\centering
+\caption{Results for initial weights $w_{1}$ and $w_{2}$}
+\label{my-label}
+\begin{tabular}{c|cccc}
+\multicolumn{1}{l}{Learn Rate} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Neuron 1 (3x3 I/L)\\ Accuracy (\%)\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Neuron 2 (3x3 C/U)\\ Accuracy (\%)\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Neuron 3 (5x5 I/L)\\ Accuracy (\%)\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Neuron 4 (5x5 C/U)\\ Accuracy(\%)\end{tabular}} \\
+0.4                            & 25                                                                                             & 100                                                                                            & 50                                                                                             & 50                                                                                            \\
+0.1                            & 25                                                                                             & 100                                                                                            & 75                                                                                             & 75                                                                                            \\
+0.01                           & 25                                                                                             & 100                                                                                            & 75                                                                                             & 50                                                                                            \\
+0.17                           & 25                                                                                             & 100                                                                                            & 50                                                                                             & 50                                                                                            \\
+-10                            & \multicolumn{4}{c}{did not converge}                                                                                                                                                                                                                                                                                                                                                             \\
+-1                             & \multicolumn{4}{c}{did not converge}                                                                                                                                                                                                                                                                                                                                                             \\
+-0.1                           & \multicolumn{4}{c}{did not converge}                                                                                                                                                                                                                                                                                                                                                             \\
+-0.01                          & \multicolumn{4}{c}{did not converge}                                                                                                                                                                                                                                                                                                                                                            
+\end{tabular}
+\end{table}
+
+\section{Question 2}
+From table 1, we can see that the accuracy of the neuron does seem to be linked to the resolution of the 'image', the two neurons that were analysing 5x5 pixel 'images' consistently performed better than the two neurons that were analysing 3x3 pixel 'images'. However, neuron 2, which examined the matrices shown below, always achieved 100\% accuracy, though, it must be said that this neuron only had 2 test cases, whereas all others had 4 test cases.\\ Interestingly, the accuracy of the neurons actually decreased when the test and train sets were swapped. Namely, the training was done with 4 vectors each (with the exeception of neuron 2), and testing done with 2 vectors, the results of this are shwon in table 2. Furthermore, this process reduced the accuracy of neuron 2 (which still had only 2 train and 2 test vectors) from 100\% to 0\%. 
+
 
 Learn rate 0.4: 25\%, 100\%, 50\%. 50\%\\
 $w_{initial1} = [1,1,1,1,0,1,1,0,0,-1]$\\

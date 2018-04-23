@@ -36,11 +36,14 @@ def main():
 
     test1 = [[0,0,1, 0,0,1, 0,0,1, -1], [0,1,0, 0,1,0, 0,1,1, -1],
              [1,0,0, 1,0,0, 1,0,0, -1], [0,1,0, 0,1,0, 1,1,0, -1]]
+             
     test2 = [[1,1,1, 0,0,1, 1,1,1, -1], [1,1,1, 1,0,1, 1,0,1, -1]]
+    
     test3 = [[0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, -1],
              [0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 1,1,1,0,0, -1],
              [0,1,1,1,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,1,1,1,0, -1],
              [1,1,0,0,0, 1,1,0,0,0, 1,1,0,0,0, 1,1,1,1,1, 1,1,1,1,1, -1]]
+             
     test4 = [[1,1,1,1,1, 1,1,1,1,1, 1,1,0,0,0, 1,1,1,1,1, 1,1,1,1,1, -1],
              [1,1,1,0,0, 1,0,0,0,0, 1,1,1,0,0, 0,0,0,0,0, 0,0,0,0,0, -1],
              [1,0,0,0,1, 1,0,0,0,1, 1,1,1,1,1, 0,0,0,0,0, 0,0,0,0,0, -1],
@@ -67,20 +70,20 @@ def main():
         neuron3 = Neuron(w_initial2, lr_initial)
         neuron4 = Neuron(w_initial2, lr_initial)
     
-        neuron1.trainNeuron(train1,targets1)
-        neuron2.trainNeuron(train2,targets2)
-        neuron3.trainNeuron(train3,targets3)
-        neuron4.trainNeuron(train4,targets4)
+        neuron1.trainNeuron(test1,expected1)
+        neuron2.trainNeuron(test2,expected2)
+        neuron3.trainNeuron(test3,expected3)
+        neuron4.trainNeuron(test4,expected4)
 
         adjusted1 += neuron1.changes
         adjusted2 += neuron2.changes
         adjusted3 += neuron3.changes
         adjusted4 += neuron4.changes
         
-        overall_accuracy1 += printResults(test1,expected1,neuron1)
-        overall_accuracy2 += printResults(test2,expected2,neuron2)
-        overall_accuracy3 += printResults(test3,expected3,neuron3)
-        overall_accuracy4 += printResults(test4,expected4,neuron4)
+        overall_accuracy1 += printResults(train1,targets1,neuron1)
+        overall_accuracy2 += printResults(train2,targets2,neuron2)
+        overall_accuracy3 += printResults(train3,targets3,neuron3)
+        overall_accuracy4 += printResults(train4,targets4,neuron4)
         
     overall_accuracy1 /= float(num_iterations)
     overall_accuracy2 /= float(num_iterations)
