@@ -3,66 +3,205 @@
 \title{CS457 Project 2}
 \author{Nick Rohde}
 
-
+\usepackage{subcaption}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\hypersetup
+{
+	colorlinks=true,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=blue,
+	linktoc=all,
+	linkcolor=blue,
+}
 
 \begin{document}
 \maketitle
 
 
 \section{Question 1}
-The experimentation showed that training of the neuron always converges, given that the learning rate is a positive real number; for any given negative real number tested, training resulted in an endless loop that did not stop, the initial weights set did not seem to have any impact on this. Table 1 shows the results of testing with different learning rates, and different initial weight vectors; the resulting accuracy of the four neurons is also shown for reference. 
+The experimentation showed that training of the neuron always converges, given that the learning rate is a positive real number; for any given negative real number tested, training resulted in an endless loop that did not stop, the initial weights set did not seem to have any impact on this. \hyperref[T1]{Table 1} shows the results of testing with different learning rates, and different initial weight vectors; the resulting accuracy of the four neurons is also shown for reference. \\
 
-\begin{table}[]
-\centering
-\caption{Results for initial weights $w_{1}$ and $w_{2}$}
-\label{my-label}
-\begin{tabular}{c|cccc}
-\multicolumn{1}{l}{Learn Rate} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Neuron 1 (3x3 I/L)\\ Accuracy (\%)\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Neuron 2 (3x3 C/U)\\ Accuracy (\%)\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Neuron 3 (5x5 I/L)\\ Accuracy (\%)\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Neuron 4 (5x5 C/U)\\ Accuracy(\%)\end{tabular}} \\
-0.4                            & 25                                                                                             & 100                                                                                            & 50                                                                                             & 50                                                                                            \\
-0.1                            & 25                                                                                             & 100                                                                                            & 75                                                                                             & 75                                                                                            \\
-0.01                           & 25                                                                                             & 100                                                                                            & 75                                                                                             & 50                                                                                            \\
-0.17                           & 25                                                                                             & 100                                                                                            & 50                                                                                             & 50                                                                                            \\
--10                            & \multicolumn{4}{c}{did not converge}                                                                                                                                                                                                                                                                                                                                                             \\
--1                             & \multicolumn{4}{c}{did not converge}                                                                                                                                                                                                                                                                                                                                                             \\
--0.1                           & \multicolumn{4}{c}{did not converge}                                                                                                                                                                                                                                                                                                                                                             \\
--0.01                          & \multicolumn{4}{c}{did not converge}                                                                                                                                                                                                                                                                                                                                                            
-\end{tabular}
-\end{table}
+\begin{minipage}{\linewidth}
+	\centering
+	\captionof{table}{Results for Initial Weights $w_{1}$ and $w_{2}$} \label{tab:title} 
+	\begin{tabular}{c|cccc}\label{T1}
+		Learn Rate      & Neuron 1$^{\dagger}$ 	& Neuron 2$^{\dagger}$ 	& Neuron 3$^{\dagger\dagger}$ 	& Neuron 4$^{\dagger\dagger}$ \\
+		\hline
+		0.4				& 25	   	& 100	  	& 50		& 50 \\
+		0.1				& 25	   	& 100	  	& 75		& 75 \\
+		0.01			& 25		& 100		& 75		& 50 \\
+		0.17			& 25		& 100		& 50		& 50 \\
+		-1.0			& *			& *			& *			& *	 \\
+		-0.1			& *			& *			& *			& *	 \\
+		-0.01			& *			& *			& *			& *	 \\
+	\end{tabular}
+	\bigskip\\
+	\small
+	\textit{* denotes that training did not converge after 5 minutes\\}
+	\textit{$\dagger$ denotes training with $w_{1}=[1,-1,1,-1,-0.2,1,1,0.5,-0.1,-1]$\\}
+	\textit{$\dagger\dagger$ denotes training with $w_{2}=[1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,1]$\\}
+\end{minipage}
 
 \section{Question 2}
-From table 1, we can see that the accuracy of the neuron does seem to be linked to the resolution of the 'image', the two neurons that were analysing 5x5 pixel 'images' consistently performed better than the two neurons that were analysing 3x3 pixel 'images'. However, neuron 2, which examined the matrices shown below, always achieved 100\% accuracy, though, it must be said that this neuron only had 2 test cases, whereas all others had 4 test cases.\\ Interestingly, the accuracy of the neurons actually decreased when the test and train sets were swapped. Namely, the training was done with 4 vectors each (with the exeception of neuron 2), and testing done with 2 vectors, the results of this are shwon in table 2. Furthermore, this process reduced the accuracy of neuron 2 (which still had only 2 train and 2 test vectors) from 100\% to 0\%. 
+From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears to be linked to the resolution of the 'image'. The neurons that were analysing the 5x5 pixel 'images' consistently performed better than the neurons that were analysing the 3x3 pixel 'images'. However, neuron 2, which examined the matrices shown below, always achieved 100\% accuracy, though, it must be said that this neuron only had 2 test cases, whereas all others had 4 test cases.\\ \\Interestingly, the accuracy of the neurons actually decreased when the test and train sets were swapped. Namely, the training was done with 4 vectors each (with the exeception of neuron 2), and testing done with 2 vectors, the results of this are shwon in \hyperref[T2]{table 2}. Furthermore, this process reduced the accuracy of neuron 2 (which still had only 2 train and 2 test vectors) from 100\% to 0\%. 
 
+\section{Training Matrices}
+	All matrices were converted to a single vector containing $N\times N + 1$ elements, where the added element was the bias, which was set to -1 for all matrices.
+	\subsection{Neuron 1}
+	\[
+	L = 
+	\begin{bmatrix}
+	1 & 0 & 0 \\
+	1 & 0 & 0 \\
+	1 & 1 & 1
+	\end{bmatrix}
+	,~~I = 
+	\begin{bmatrix}
+	0 & 1 & 0 \\
+	0 & 1 & 0 \\
+	0 & 1 & 0
+	\end{bmatrix}
+	\]
+	\subsection{Neuron 2}
+	\[
+	C = 
+	\begin{bmatrix}
+	1 & 1 & 1 \\
+	1 & 0 & 0 \\
+	1 & 1 & 1
+	\end{bmatrix}
+	,~~U = 
+	\begin{bmatrix}
+	1 & 0 & 1 \\
+	1 & 0 & 1 \\
+	1 & 1 & 1
+	\end{bmatrix}
+	\]
+	\subsection{Neuron 3}
+	\[
+	L = 
+	\begin{bmatrix}
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 1 & 1 & 1 & 1
+	\end{bmatrix}
+	,~~I = 
+	\begin{bmatrix}
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0
+	\end{bmatrix}
+	\]
+	\subsection{Neuron 4}
+	\[
+	C = 
+	\begin{bmatrix}
+	1 & 1 & 1 & 1 & 1 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 1 & 1 & 1 & 1
+	\end{bmatrix}
+	,~~U = 
+	\begin{bmatrix}
+	1 & 0 & 0 & 0 & 1 \\
+	1 & 0 & 0 & 0 & 1 \\
+	1 & 0 & 0 & 0 & 1 \\
+	1 & 0 & 0 & 0 & 1 \\
+	1 & 1 & 1 & 1 & 1
+	\end{bmatrix}
+	\]
 
-Learn rate 0.4: 25\%, 100\%, 50\%. 50\%\\
-$w_{initial1} = [1,1,1,1,0,1,1,0,0,-1]$\\
-$w_{initial2} = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,-1]$\\
+\section{Validation Matrices}
+	\subsection{Neuron 1}
+	\[
+	L = 
+	\begin{bmatrix}
+	0 & 1 & 0 \\
+	0 & 1 & 0 \\
+	0 & 1 & 1
+	\end{bmatrix}
+	,~~L = 
+	\begin{bmatrix}
+	0 & 1 & 0 \\
+	0 & 1 & 0 \\
+	1 & 1 & 0
+	\end{bmatrix}
+	,~~I = 
+	\begin{bmatrix}
+	1 & 0 & 0 \\
+	1 & 0 & 0 \\
+	1 & 0 & 0
+	\end{bmatrix}
+	,~~I = 
+	\begin{bmatrix}
+	0 & 0 & 1 \\
+	0 & 0 & 1 \\
+	0 & 0 & 1
+	\end{bmatrix}
+	\]
+	\subsection{Neuron 2}
+	Due to the low resolution, Neuron 2 was only validated with 2 test vectors, rather than 4.
+	\[
+	C = 
+	\begin{bmatrix}
+	1 & 1 & 1 \\
+	0 & 0 & 1 \\
+	1 & 1 & 1
+	\end{bmatrix}
+	,~~U = 
+	\begin{bmatrix}
+	1 & 1 & 1 \\
+	1 & 0 & 1 \\
+	1 & 0 & 1
+	\end{bmatrix}
+	\]
+	\subsection{Neuron 3}
+	\[
+	L = 
+	\begin{bmatrix}
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 1 & 1 & 1 & 1
+	\end{bmatrix}
+	,~~I = 
+	\begin{bmatrix}
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0
+	\end{bmatrix}
+	\]
+	\subsection{Neuron 4}
+	\[
+	C = 
+	\begin{bmatrix}
+	1 & 1 & 1 & 1 & 1 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 1 & 1 & 1 & 1
+	\end{bmatrix}
+	,~~U = 
+	\begin{bmatrix}
+	1 & 0 & 0 & 0 & 1 \\
+	1 & 0 & 0 & 0 & 1 \\
+	1 & 0 & 0 & 0 & 1 \\
+	1 & 0 & 0 & 0 & 1 \\
+	1 & 1 & 1 & 1 & 1
+	\end{bmatrix}
+	\]
 
-Learn rate 0.4: 0\%, 100\%, 50\%, 50\%\\
-$w_{initial1} = [1,1,1,1,0,1,1,0,0,-0.1]$\\
-$w_{initial2} = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,-1]$\\
-
-Learn rate 0.1: 25\%, 100\%, 75\%, 75\%\\
-$w_{initial1} = [1,1,1,1,0,1,1,0,0,-0.1]$\\
-$w_{initial2} = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,-1]$\\
-
-Learn rate 0.01: 25\%, 100\%, 75\%, 50\%\\
-$w_{initial1} = [1,1,1,1,0,1,1,0,0,-0.1]$\\
-$w_{initial2} = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,-1]$\\
-
-Learn rate 0.01: 25\%, 100\%, 75\%, 75\%\\
-$w_{initial1} = [1,1,1,1,0,1,1,0,0,-0.2]$\\
-$w_{initial2} = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,1]$\\
-
-Learn rate -0.01: does not converge\\
-$w_{initial1} = [1,-1,1,-1,-0.2,1,1,0.5,-0.1,-0.2]$\\
-$w_{initial2} = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,1]$\\
-
-Learn rate -0.1: does not converge\\
-$w_{initial1} = [1,-1,1,-1,-0.2,1,1,0.5,-0.1,-0.2]$\\
-$w_{initial2} = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,1]$\\
-
-Learn rate -1: does not converge\\
-$w_{initial1} = [1,-1,1,-1,-0.2,1,1,0.5,-0.1,1]$\\
-$w_{initial2} = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,1]$\\
 
 \end{document}
