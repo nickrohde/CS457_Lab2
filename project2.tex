@@ -1,5 +1,7 @@
 \documentclass{article}
 
+% !TeX spellcheck = en_US 
+
 \title{CS457 Project 2}
 \author{Nick Rohde}
 
@@ -7,6 +9,11 @@
 \usepackage[margin=0.5in]{geometry}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+\usepackage{titlesec}
+\usepackage[labelfont=bf]{caption}
+
 \hypersetup
 {
 	colorlinks=true,
@@ -20,46 +27,153 @@
 
 \begin{document}
 \maketitle
-
+\tableofcontents
+\pagebreak
 
 \section{Question 1}
-The experimentation showed that training of the neuron always converges, given that the learning rate is a positive real number; for any given negative real number tested, training resulted in an endless loop that did not stop, the initial weights set did not seem to have any impact on this. \hyperref[T1]{Table 1} shows the results of testing with different learning rates, and different initial weight vectors; the resulting accuracy of the four neurons is also shown for reference. \\
+The experimentation showed that training of the neuron always converges if the learning rate is a positive real number; for any negative real number, that was tested, training was not guaranteed to converge for all neurons - the first neuron converged, but the rest did not, the longest test ran for about 3 hours and at this point Neuron 2 was still training. The initial weights  did not seem to have any impact on whether training converges, however, it did have an impact on the accuracy of the classifier. \hyperref[T1]{Table 1} shows the results of testing with different learning rates; the resulting accuracy of the four neurons is also shown for reference. In this table, we can see that even very small positive learning rates resulted in convergence, but very small negative numbers, such as -0.001, did not converge. \\Thus, the conclusion from these tests is that the learning rate must be positive in order to guarantee successful training. It appears that this is dependent on the input, mainly because neuron 1 converged even with negative learning rates, this could mean that there is a link between the data and the learning rate's sign. In the case of neurons 2-4, the training resulted in weights oscillating between two extremes without reaching a middle point. When these neurons were stopped prematurely after 100 iterations of training, their performance was terrible. So, the value the neurons were oscillating around was most likely some random point, rather than some meaningful value.
+
+\section{Question 2}
+In \hyperref[T1]{Tables 1-6}, we can see that the accuracy of a neuron does not appear to be linked to the resolution (or dimensions) of the image. At least in our scope, an increase in image resolution did not significantly improve the accuracy. Neurons that were classifying the 5x5 pixel 'images' performed no better than the neurons that were analyzing the 3x3 pixel 'images'. In fact, the neurons classifying the 3x3 images occasionally outperformed the neurons classifying 5x5 images. However, it should be noted that the test images were not identical for the neurons classifying 3x3 images and the neurons classifying 5x5 matrices, this could've impacted the findings. Both the training and testing inputs can be found in \hyperref[S5]{Section 5} and \hyperref[S6]{Section 6}, respectively\\ \\ Interestingly, some of the neurons actually improved when noise was introduced into the training and validation vectors. Neurons trained with noise (\hyperref[T3]{Table 3} and \hyperref[T6]{Table 6}) performed significantly better than their counter parts trained without noise. Surprisingly, neurons tested with noisy input also outperformed their counterparts without tested without noise, even though the training did not involve noisy input in for these neurons.
+
+\section{Data}
+This section displays the numerical data from all testing done. All data is averaged over 100 iterations; each iteration the neurons were trained anew with the same vectors from before, however, the training automatically shuffles the input matrix to ensure neurons are not trained the same way every time.\\
+\linebreak
+\begin{minipage}{\linewidth}
+	\centering
+	\captionof{table}{Validation Results \\(2 train vectors, 4 test vectors)}
+	\begin{tabular}{c|cccc}\label{T1}
+		Learn Rate      & \multicolumn{4}{c}{Accuracy (\%)} \\
+		& Neuron 1$^{\dagger}$ 	& Neuron 2$^{\dagger}$ 	& Neuron 3$^{\dagger\dagger}$ 	& Neuron 4$^{\dagger\dagger}$ \\
+		\hline
+		0.40			& 25.0		& 75.0		& 75.0		& 75.0 \\
+		0.17			& 25.0		& 75.0		& 75.0		& 75.0 \\
+		0.10			& 25.0		& 75.0		& 75.0		& 75.0 \\
+		0.01			& 25.0		& 75.0		& 75.0		& 75.0 \\
+		-1.0			& *			& *			& *			& *	   \\
+		-0.1			& *			& *			& *			& *	   \\
+		-0.01			& *			& *			& *			& *	   \\
+		-0.001			& *			& *			& *			& *	   \\
+	\end{tabular}
+
+	\bigskip
+	\small
+	\textit{* denotes that training did not converge after 5 minutes\\}
+	\textit{$\dagger$ denotes neuron for $3\times 3$ matrix\\}
+	\textit{$\dagger\dagger$ denotes neuron for $5\times 5$ matrix\\}
+\end{minipage}
 
 \begin{minipage}{\linewidth}
 	\centering
-	\captionof{table}{Results for Initial Weights $w_{1}$ and $w_{2}$} \label{tab:title} 
-	\begin{tabular}{c|cccc}\label{T1}
-		Learn Rate      & Neuron 1$^{\dagger}$ 	& Neuron 2$^{\dagger}$ 	& Neuron 3$^{\dagger\dagger}$ 	& Neuron 4$^{\dagger\dagger}$ \\
+	\captionof{table}{Validation Results (tested with Noise) \\(2 train vectors, 4 test vectors)}
+	\begin{tabular}{c|cccc}\label{T2}
+		Learn Rate      & \multicolumn{4}{c}{Accuracy (\%)} \\
+		& Neuron 1$^{\dagger}$ 	& Neuron 2$^{\dagger}$ 	& Neuron 3$^{\dagger\dagger}$ 	& Neuron 4$^{\dagger\dagger}$ \\
 		\hline
-		0.4				& 25	   	& 100	  	& 50		& 50 \\
-		0.1				& 25	   	& 100	  	& 75		& 75 \\
-		0.01			& 25		& 100		& 75		& 50 \\
-		0.17			& 25		& 100		& 50		& 50 \\
-		-1.0			& *			& *			& *			& *	 \\
-		-0.1			& *			& *			& *			& *	 \\
-		-0.01			& *			& *			& *			& *	 \\
+		0.40			& 50.0   	& 100	  	& 75.0		& 100  \\
+		0.17			& 50.0		& 50.0		& 75.0		& 75.0 \\
+		0.10			& 50.0		& 75.0		& 75.0		& 75.0 \\
+		0.01			& 50.0		& 75.0		& 75.0		& 50.0 \\
+		-1.0			& *			& *			& *			& *	   \\
+		-0.1			& *			& *			& *			& *	   \\
+		-0.01			& *			& *			& *			& *	   \\
+		-0.001			& *			& *			& *			& *	   \\
 	\end{tabular}
-	\bigskip\\
+\linebreak
+\linebreak
+	\captionof{table}{Validation Results (trained with Noise) \\(2 train vectors, 4 test vectors)}
+	\begin{tabular}{c|cccc}\label{T3}
+		Learn Rate      & \multicolumn{4}{c}{Accuracy (\%)} \\
+		& Neuron 1$^{\dagger}$ 	& Neuron 2$^{\dagger}$ 	& Neuron 3$^{\dagger\dagger}$ 	& Neuron 4$^{\dagger\dagger}$ \\
+		\hline
+		0.40			& 25.0   	& 100	  	& 75.0		& 50.0 \\
+		0.17			& 25.0		& 75.0		& 75.0		& 50.0 \\
+		0.10			& 25.0		& 75.0		& 75.0		& 50.0 \\
+		0.01			& 25.0		& 75.0		& 75.0		& 50.0 \\
+		-1.0			& *			& *			& *			& *	   \\
+		-0.1			& *			& *			& *			& *	   \\
+		-0.01			& *			& *			& *			& *	   \\
+		-0.001			& *			& *			& *			& *	   \\
+	\end{tabular}
+\linebreak
+\linebreak
+	\captionof{table}{Validation Results \\(4 train vectors, 2 test vectors)}
+	\begin{tabular}{c|cccc}\label{T4}
+		Learn Rate      & \multicolumn{4}{c}{Accuracy (\%)} \\
+		& Neuron 1$^{\dagger}$ 	& Neuron 2$^{\dagger}$ 	& Neuron 3$^{\dagger\dagger}$ 	& Neuron 4$^{\dagger\dagger}$ \\
+		\hline
+		0.40			& 37.5		& 49.5		& 50.0		& 50.0 \\
+		0.17			& 50.0		& 48.5		& 50.0		& 50.0 \\
+		0.10			& 50.0		& 48.0		& 50.0		& 50.0 \\
+		0.01			& 50.0		& 50.0		& 50.0		& 50.0 \\
+		-1.0			& *			& *			& *			& *	   \\
+		-0.1			& *			& *			& *			& *	   \\
+		-0.01			& *			& *			& *			& *	   \\
+		-0.001			& *			& *			& *			& *	   \\
+	\end{tabular}
+\linebreak
+\linebreak
+	\captionof{table}{Validation Results (tested with Noise) \\(4 train vectors, 2 test vectors)}
+	\begin{tabular}{c|cccc}\label{T5}
+		Learn Rate      & \multicolumn{4}{c}{Accuracy (\%)} \\
+		& Neuron 1$^{\dagger}$ 	& Neuron 2$^{\dagger}$ 	& Neuron 3$^{\dagger\dagger}$ 	& Neuron 4$^{\dagger\dagger}$ \\
+		\hline
+		0.40			& 45.5   	& 50.0	  	& 50.0		& 50.0 \\
+		0.17			& 50.0		& 50.0		& 50.0		& 50.0 \\
+		0.10			& 67.5		& 50.0		& 50.0		& 50.0 \\
+		0.01			& 100.0		& 50.0		& 50.0		& 50.0 \\
+		-1.0			& *			& *			& *			& *	   \\
+		-0.1			& *			& *			& *			& *	   \\
+		-0.01			& *			& *			& *			& *	   \\
+		-0.001			& *			& *			& *			& *	   \\
+	\end{tabular}
+
+	\bigskip
 	\small
 	\textit{* denotes that training did not converge after 5 minutes\\}
-	\textit{$\dagger$ denotes training with $w_{1}=[1,-1,1,-1,-0.2,1,1,0.5,-0.1,-1]$\\}
-	\textit{$\dagger\dagger$ denotes training with $w_{2}=[1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,1]$\\}
+	\textit{$\dagger$ denotes neuron for $3\times 3$ matrix\\}
+	\textit{$\dagger\dagger$ denotes neuron for $5\times 5$ matrix\\}
 \end{minipage}
 
-\section{Question 2}
-From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears to be linked to the resolution of the 'image'. The neurons that were analysing the 5x5 pixel 'images' consistently performed better than the neurons that were analysing the 3x3 pixel 'images'. However, neuron 2, which examined the matrices shown below, always achieved 100\% accuracy, though, it must be said that this neuron only had 2 test cases, whereas all others had 4 test cases.\\ \\Interestingly, the accuracy of the neurons actually decreased when the test and train sets were swapped. Namely, the training was done with 4 vectors each (with the exeception of neuron 2), and testing done with 2 vectors, the results of this are shwon in \hyperref[T2]{table 2}. Furthermore, this process reduced the accuracy of neuron 2 (which still had only 2 train and 2 test vectors) from 100\% to 0\%. 
-
-\section{Training Matrices}
-	All matrices were converted to a single vector containing $N\times N + 1$ elements, where the added element was the bias, which was set to -1 for all matrices.
+\begin{minipage}{\linewidth}
+	\centering
+	\captionof{table}{Validation Results (trained with Noise) \\(4 train vectors, 2 test vectors)}
+	\begin{tabular}{c|cccc}\label{T6}
+		Learn Rate      & \multicolumn{4}{c}{Accuracy (\%)} \\
+		& Neuron 1$^{\dagger}$ 	& Neuron 2$^{\dagger}$ 	& Neuron 3$^{\dagger\dagger}$ 	& Neuron 4$^{\dagger\dagger}$ \\
+		\hline
+		0.4				& 70.0   	& 66.0	  	& 50.0		& 50.0 \\
+		0.17			& 100		& 52.5		& 50.0		& 50.0 \\
+		0.1				& 100		& 50.0		& 50.0		& 50.0 \\
+		0.01			& 100		& 50.0		& 50.0		& 50.0 \\
+		-1.0			& *			& *			& *			& *	   \\
+		-0.1			& *			& *			& *			& *	   \\
+		-0.01			& *			& *			& *			& *	   \\
+		-0.001			& *			& *			& *			& *	   \\
+	\end{tabular}
+	
+	\bigskip
+	\small
+	\textit{* denotes that training did not converge after 5 minutes\\}
+	\textit{$\dagger$ denotes neuron for $3\times 3$ matrix\\}
+	\textit{$\dagger\dagger$ denotes neuron for $5\times 5$ matrix\\}
+\end{minipage}
+\linebreak
+\section{Implementation}\label{S4}
+	The implementation that was used for this project was based on the description from the book; though no code from the book was used. All code was written in Python and no libraries were used (besides random) as there was no inherent need to use any libraries for this project. The algorithms that were implemented in the Neuron class were taken from page 49 in the book (Machine Learning: An Algorithmic Perspective, Marsland, 2015, 2nd Edition). 
+	
+	
+\section{Training Matrices}\label{S5}
+	All matrices were converted to a single vector containing $(N^2 + 1)$ elements, where the added element was the bias, which was set to -1 for all matrices. The training vectors were shuffled before each iteration of training began to avoid the neurons being trained the same way each time.
 	\subsection{Neuron 1}
 	\[
-	L = 
+	L_{1t} = 
 	\begin{bmatrix}
 	1 & 0 & 0 \\
 	1 & 0 & 0 \\
 	1 & 1 & 1
 	\end{bmatrix}
-	,~~I = 
+	,~~I_{1t} = 
 	\begin{bmatrix}
 	0 & 1 & 0 \\
 	0 & 1 & 0 \\
@@ -68,13 +182,13 @@ From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears 
 	\]
 	\subsection{Neuron 2}
 	\[
-	C = 
+	C_{2t} = 
 	\begin{bmatrix}
 	1 & 1 & 1 \\
 	1 & 0 & 0 \\
 	1 & 1 & 1
 	\end{bmatrix}
-	,~~U = 
+	,~~U_{2t} = 
 	\begin{bmatrix}
 	1 & 0 & 1 \\
 	1 & 0 & 1 \\
@@ -83,7 +197,7 @@ From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears 
 	\]
 	\subsection{Neuron 3}
 	\[
-	L = 
+	L_{3t} = 
 	\begin{bmatrix}
 	1 & 0 & 0 & 0 & 0 \\
 	1 & 0 & 0 & 0 & 0 \\
@@ -91,7 +205,7 @@ From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears 
 	1 & 0 & 0 & 0 & 0 \\
 	1 & 1 & 1 & 1 & 1
 	\end{bmatrix}
-	,~~I = 
+	,~~I_{3t} = 
 	\begin{bmatrix}
 	1 & 0 & 0 & 0 & 0 \\
 	1 & 0 & 0 & 0 & 0 \\
@@ -102,7 +216,7 @@ From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears 
 	\]
 	\subsection{Neuron 4}
 	\[
-	C = 
+	C_{4t} = 
 	\begin{bmatrix}
 	1 & 1 & 1 & 1 & 1 \\
 	1 & 0 & 0 & 0 & 0 \\
@@ -110,7 +224,7 @@ From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears 
 	1 & 0 & 0 & 0 & 0 \\
 	1 & 1 & 1 & 1 & 1
 	\end{bmatrix}
-	,~~U = 
+	,~~U_{4t} = 
 	\begin{bmatrix}
 	1 & 0 & 0 & 0 & 1 \\
 	1 & 0 & 0 & 0 & 1 \\
@@ -119,29 +233,31 @@ From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears 
 	1 & 1 & 1 & 1 & 1
 	\end{bmatrix}
 	\]
-
-\section{Validation Matrices}
+	
+\pagebreak
+\section{Validation Matrices}\label{S6}
+	Similarly to the training matrices, these well all converted to a single vector containing $(N^2 + 1)$ elements, with the last element being the bias, which was -1 for all matrices. \\ One thing of note is that most of the testing images are not visually similar to the training images; this was done on purpose to see how well the classifiers 'understood' what a letter 'looks' like. 
 	\subsection{Neuron 1}
 	\[
-	L = 
+	L_{1v1} = 
 	\begin{bmatrix}
 	0 & 1 & 0 \\
 	0 & 1 & 0 \\
 	0 & 1 & 1
 	\end{bmatrix}
-	,~~L = 
+	,~~L_{1v2} = 
 	\begin{bmatrix}
 	0 & 1 & 0 \\
 	0 & 1 & 0 \\
 	1 & 1 & 0
 	\end{bmatrix}
-	,~~I = 
+	,~~I_{1v1} = 
 	\begin{bmatrix}
 	1 & 0 & 0 \\
 	1 & 0 & 0 \\
 	1 & 0 & 0
 	\end{bmatrix}
-	,~~I = 
+	,~~I_{1v2} = 
 	\begin{bmatrix}
 	0 & 0 & 1 \\
 	0 & 0 & 1 \\
@@ -149,57 +265,100 @@ From \hyperref[T1]{table 1}, we can see that the accuracy of the neuron appears 
 	\end{bmatrix}
 	\]
 	\subsection{Neuron 2}
-	Due to the low resolution, Neuron 2 was only validated with 2 test vectors, rather than 4.
 	\[
-	C = 
+	C_{2v1} = 
 	\begin{bmatrix}
 	1 & 1 & 1 \\
 	0 & 0 & 1 \\
 	1 & 1 & 1
 	\end{bmatrix}
-	,~~U = 
+	,~~C_{2v2} = 
+	\begin{bmatrix}
+	1 & 1 & 0 \\
+	1 & 0 & 0 \\
+	1 & 1 & 0
+	\end{bmatrix}
+	,~~U_{2v1} = 
 	\begin{bmatrix}
 	1 & 1 & 1 \\
 	1 & 0 & 1 \\
 	1 & 0 & 1
 	\end{bmatrix}
+	,~~U_{2v2} = 
+	\begin{bmatrix}
+	0 & 0 & 0 \\
+	1 & 0 & 1 \\
+	1 & 1 & 1
+	\end{bmatrix}
 	\]
 	\subsection{Neuron 3}
 	\[
-	L = 
+	L_{3v1} = 
 	\begin{bmatrix}
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0 \\
+	1 & 1 & 0 & 0 & 0 \\
+	1 & 1 & 0 & 0 & 0 \\
+	1 & 1 & 0 & 0 & 0 \\
+	1 & 1 & 1 & 1 & 1 \\
 	1 & 1 & 1 & 1 & 1
 	\end{bmatrix}
-	,~~I = 
+	,~~L_{3v2} = 
 	\begin{bmatrix}
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	1 & 1 & 1 & 0 & 0
+	\end{bmatrix}
+	,~~I_{3v1} = 
+	\begin{bmatrix}
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0
+	\end{bmatrix}
+	,~~I_{3v1} = 
+	\begin{bmatrix}
+	0 & 1 & 1 & 1 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 1 & 1 & 1 & 0
 	\end{bmatrix}
 	\]
 	\subsection{Neuron 4}
 	\[
-	C = 
+	C_{4v1} = 
 	\begin{bmatrix}
 	1 & 1 & 1 & 1 & 1 \\
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0 \\
-	1 & 0 & 0 & 0 & 0 \\
+	1 & 1 & 1 & 1 & 1 \\
+	1 & 1 & 0 & 0 & 0 \\
+	1 & 1 & 1 & 1 & 1 \\
 	1 & 1 & 1 & 1 & 1
 	\end{bmatrix}
-	,~~U = 
+	,~~C_{4v2} = 
+	\begin{bmatrix}
+	1 & 1 & 1 & 0 & 0 \\
+	1 & 0 & 0 & 0 & 0 \\
+	1 & 1 & 1 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 0
+	\end{bmatrix}
+	,~~U_{4v1} = 
 	\begin{bmatrix}
 	1 & 0 & 0 & 0 & 1 \\
 	1 & 0 & 0 & 0 & 1 \\
-	1 & 0 & 0 & 0 & 1 \\
-	1 & 0 & 0 & 0 & 1 \\
-	1 & 1 & 1 & 1 & 1
+	1 & 1 & 1 & 1 & 1 \\
+	0 & 0 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 0
+	\end{bmatrix}
+	,~~U_{4v2} = 
+	\begin{bmatrix}
+	1 & 0 & 1 & 0 & 0 \\
+	1 & 0 & 1 & 0 & 0 \\
+	1 & 1 & 1 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 0
 	\end{bmatrix}
 	\]
 
