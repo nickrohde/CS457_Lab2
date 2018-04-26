@@ -8,36 +8,56 @@ Created on Thu Apr 19 14:46:22 2018
 import random 
 
 def main():
-    # initial weights for 10 and 25 input neurons
-    w_initial1 = [1,-1,1,-1,-0.2,1,1,0.5,-0.1,1]
-    w_initial2 = [1,-1,-1,1,0,1,1,0,0,1,1,-1,-1,1,0,1,1,0,0,1,1,0,1,1,0,1]
+    random.seed()    
     
-    lr_initial = 0.17  
+    # initial weights for 10 and 25 input neurons
+    w_initial1 = [random.uniform(0,1) for _ in xrange(9)]
+    w_initial2 = [random.uniform(0,1) for _ in xrange(25)]
+    
+    w_initial1.append(-1)
+    w_initial2.append(-1)    
+    
+    lr_initial = 0.4
     
     # L = 1; I = -1
     # C = 1; U = -1
     # training data for 3x3 matrix with I and L
-    train1 = [[1,0,0, 1,0,0, 1,1,1, -1],
-              [0,1,0, 0,1,0, 0,1,0, -1]]
-    # training data for 3x3 matrix with I and L
-    train2 = [[1,1,1, 1,0,0, 1,1,1, -1],
-              [1,0,1, 1,0,1, 1,1,1, -1]]
+#    train1 = [[1,0,0, 1,0,0, 1,1,1, -1],
+#              [0,1,0, 0,1,0, 0,1,0, -1]]
+    # training data for 3x3 matrix with C and U
+#    train2 = [[1,1,1, 1,0,0, 1,1,1, -1],
+#              [1,0,1, 1,0,1, 1,1,1, -1]]
     # training data for 5x5 matrix with I and L
-    train3 = [[1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, -1],
-              [1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,1,1,1,1, -1]]
+#    train3 = [[1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, -1],
+#              [1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,1,1,1,1, -1]]
     # training data for 5x5 matrix with C and U
-    train4 = [[1,1,1,1,1, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,1,1,1,1, -1],
-              [1,0,0,0,1, 1,0,0,0,1, 1,0,0,0,1, 1,1,1,1,1, 1,1,1,1,1, -1]]
+#    train4 = [[1,1,1,1,1, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,1,1,1,1, -1],
+#              [1,0,0,0,1, 1,0,0,0,1, 1,0,0,0,1, 1,1,1,1,1, 1,1,1,1,1, -1]]
+
+    train1 = [[1,0,0, 1,1,0, 1,1,1, -1],
+              [0,1,-1, 0,1,0, 0,0,0, -1]]
+    # training data for 3x3 matrix with C and U
+    train2 = [[1,1,1, 1,0,1, 1,1,1, -1],
+              [1,0,1, 1,0,1, 1,0,1, -1]]
+    # training data for 5x5 matrix with I and L
+    train3 = [[1,0,0,1,0, 1,0,1,0,0, 1,0,0,0,1, 1,0,0,0,0, 1,1,0,0,0, -1],
+              [1,0,0,0,1, 1,0,0,0,0, 1,0,0,0,0, 1,0,0,0,0, 1,1,0,1,1, -1]]
+    # training data for 5x5 matrix with C and U
+    train4 = [[1,1,0,1,1, 1,0,0,0,0, 1,0,1,0,0, 1,0,0,0,0, 1,1,0,1,1, 1],
+              [1,0,0,0,1, 1,0,1,0,1, 1,0,0,0,1, 1,1,1,1,1, 1,1,1,1,0, -1]]
+
 
     targets1 = [1,-1]
     targets2 = [1,-1]
     targets3 = [-1,1]
     targets4 = [1,-1]
 
+    # test vectors
     test1 = [[0,0,1, 0,0,1, 0,0,1, -1], [0,1,0, 0,1,0, 0,1,1, -1],
              [1,0,0, 1,0,0, 1,0,0, -1], [0,1,0, 0,1,0, 1,1,0, -1]]
              
-    test2 = [[1,1,1, 0,0,1, 1,1,1, -1], [1,1,1, 1,0,1, 1,0,1, -1]]
+    test2 = [[1,1,1, 0,0,1, 1,1,1, -1], [1,1,0, 1,0,0, 1,1,0, -1],
+             [0,0,0, 1,0,1, 1,1,1, -1], [1,1,1, 1,0,1, 1,0,1, -1]]
     
     test3 = [[0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, -1],
              [0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 1,1,1,0,0, -1],
@@ -48,11 +68,28 @@ def main():
              [1,1,1,0,0, 1,0,0,0,0, 1,1,1,0,0, 0,0,0,0,0, 0,0,0,0,0, -1],
              [1,0,0,0,1, 1,0,0,0,1, 1,1,1,1,1, 0,0,0,0,0, 0,0,0,0,0, -1],
              [1,0,1,0,0, 1,0,1,0,0, 1,1,1,0,0, 0,0,0,0,0, 0,0,0,0,0, -1]]
+
+    # test vectors with random bits altered 
+#    test1 = [[0,0,1, 0,0,1, 0,1,1, -1], [0,1,0, 0,0,0, 0,1,1, -1],
+#             [1,0,0, 1,0,0, 1,-1,0, -1], [0,1,0, 0,1,1, 1,1,0, -1]]
              
+#    test2 = [[1,1,1, 0,0,1, 1,0,1, -1], [0,1,0, 1,0,0, 1,1,0, -1],
+#             [0,0,0, 1,1,1, 1,1,1, -1], [0,1,1, 1,0,1, 1,0,1, -1]]
+    
+#    test3 = [[0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,1, 0,0,1,0,0, 0,0,1,0,0, -1],
+#             [0,1,1,0,0, 0,1,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 1,1,1,0,0, -1],
+#             [0,1,1,1,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,1,1,1,0, -1],
+#             [1,1,0,0,0, 1,1,0,0,0, 1,1,0,0,1, 1,1,1,1,1, 1,1,1,1,1, -1]]
+             
+#    test4 = [[1,1,1,1,1, 1,1,1,1,1, 1,1,0,0,0, 1,0,1,1,1, 1,1,1,1,1, -1],
+#             [1,1,1,0,0, 1,0,0,0,0, 1,1,1,0,0, 0,1,0,0,0, 0,0,0,0,0, -1],
+#             [1,0,0,0,1, 1,0,0,0,1, 1,1,0,1,1, 0,0,0,0,0, 0,0,0,0,0, -1],
+#             [1,0,1,0,0, 1,0,1,0,0, 1,1,1,0,0, 0,1,0,0,0, 0,0,0,0,0, -1]]
+            
     expected1 = [-1, 1, -1, 1]
-    expected2 = [1, -1]
+    expected2 = [ 1, 1, -1,-1]
     expected3 = [-1, 1, -1, 1]
-    expected4 = [1, 1, -1, -1]
+    expected4 = [ 1, 1, -1,-1]
 
     num_iterations = 100
     overall_accuracy1 = 0.0
@@ -70,20 +107,34 @@ def main():
         neuron3 = Neuron(w_initial2, lr_initial)
         neuron4 = Neuron(w_initial2, lr_initial)
     
-        neuron1.trainNeuron(test1,expected1)
-        neuron2.trainNeuron(test2,expected2)
-        neuron3.trainNeuron(test3,expected3)
-        neuron4.trainNeuron(test4,expected4)
+        # train with train vectors
+        neuron1.trainNeuron(train1,targets1)
+        neuron2.trainNeuron(train2,targets2)
+        neuron3.trainNeuron(train3,targets3)
+        neuron4.trainNeuron(train4,targets4)
+
+        # train with test vectors        
+#        neuron1.trainNeuron(test1,expected1)
+#        neuron2.trainNeuron(test2,expected2)
+#        neuron3.trainNeuron(test3,expected3)
+#        neuron4.trainNeuron(test4,expected4)
 
         adjusted1 += neuron1.changes
         adjusted2 += neuron2.changes
         adjusted3 += neuron3.changes
         adjusted4 += neuron4.changes
+
+        # validate with test vectors
+        overall_accuracy1 += printResults(test1,expected1,neuron1)
+        overall_accuracy2 += printResults(test2,expected2,neuron2)
+        overall_accuracy3 += printResults(test3,expected3,neuron3)
+        overall_accuracy4 += printResults(test4,expected4,neuron4)
         
-        overall_accuracy1 += printResults(train1,targets1,neuron1)
-        overall_accuracy2 += printResults(train2,targets2,neuron2)
-        overall_accuracy3 += printResults(train3,targets3,neuron3)
-        overall_accuracy4 += printResults(train4,targets4,neuron4)
+        # validate with train vectors
+#        overall_accuracy1 += printResults(train1,targets1,neuron1)
+#        overall_accuracy2 += printResults(train2,targets2,neuron2)
+#        overall_accuracy3 += printResults(train3,targets3,neuron3)
+#        overall_accuracy4 += printResults(train4,targets4,neuron4)
         
     overall_accuracy1 /= float(num_iterations)
     overall_accuracy2 /= float(num_iterations)
